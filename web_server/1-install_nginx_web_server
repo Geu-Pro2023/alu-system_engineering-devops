@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+# This script installs and configures Nginx on an Ubuntu machine.
+# It ensures that Nginx is listening on port 80 and serves a page
+# containing the string "Holberton School" when queried at its root.
+
 # Update package list and install nginx with the '-y' flag
 apt-get update -y
 apt-get install -y nginx
