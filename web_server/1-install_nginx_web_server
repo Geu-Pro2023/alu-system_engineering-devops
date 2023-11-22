@@ -1,6 +1,21 @@
-#!/usr/bin/env bash
-# installs the reverse proxy - Nginx
-sudo apt update && upgrade
-sudo apt install nginx -y 
-echo "Holberton School" | sudo tee /var/www/html/index.html
-sudo service nginx start
+#!/bin/bash
+
+# Update package list and install nginx with the '-y' flag
+apt-get update -y
+apt-get install -y nginx
+
+# Start nginx
+service nginx start
+
+# Make sure nginx is set to start on boot
+update-rc.d nginx defaults
+
+# Create a basic HTML page containing the string "Holberton School"
+echo "Holberton School for the win!" > /var/www/html/index.html
+
+# Ensure nginx is listening on port 80
+sed -i 's/^\s*listen\s*80\s*;/listen 80;/g' /etc/nginx/sites-available/default
+
+# Reload nginx configuration to apply changes
+service nginx reload
+
