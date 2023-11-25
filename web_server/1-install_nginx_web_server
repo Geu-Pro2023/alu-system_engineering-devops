@@ -15,7 +15,7 @@ else
 fi
 
 # Set variables
-web_root="/usr/share/nginx/html"  # Adjusted the web root path
+web_root="/etc/nginx/html"
 index_file="index.html"
 nginx_config="/etc/nginx/sites-available/default"
 
@@ -31,6 +31,9 @@ printf %s "server {
      listen      [::]:80 default_server;
      root        $web_root;
      index       $index_file index.htm;
+     location / {
+         try_files \$uri \$uri/ =404;
+     }
 }
 " > "$nginx_config"
 
