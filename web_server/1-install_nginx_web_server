@@ -1,22 +1,49 @@
 #!/usr/bin/env bash
-# a Bash script that configures a new Ubuntu machine to respect
-# above requirements (this script will be run on the server itself)
-# bash script to install nginx web server
-#   - Nginx should be listening on port 80
-#   - Return page containing "Holberton School" when queried
 
+# Update package information
 apt-get update
+
+# Install Nginx
 apt-get install -y nginx
 
-mkdir /etc/nginx/html
-touch /etc/nginx/html/index.html
-echo "Holberton School" > /etc/nginx/html/index.html
+# Check if Nginx installation was successful
+if [ $? -eq 0 ]; then
+    echo "Nginx installation successful"
+else
+    echo "Nginx installation failed. Exiting."
+    exit 1
+fi
+
+# Set variables
+web_root="/usr/share/nginx/html"  # Adjusted the web root path
+index_file="index.html"
+nginx_config="/etc/nginx/sites-available/default"
+
+# Create web root directory
+mkdir -p "$web_root"
+
+# Create index file with content
+echo "Holberton School" > "$web_root/$index_file"
+
+# Configure Nginx
 printf %s "server {
      listen      80 default_server;
      listen      [::]:80 default_server;
-     root        /etc/nginx/html;
-     index       index.html index.htm;
+     root        $web_root;
+     index       $index_file index.htm;
 }
-" > /etc/nginx/sites-available/default
+" > "$nginx_config"
 
+# Restart Nginx to apply changes
 service nginx restart
+
+# Check if Nginx restart was successful
+if [ $? -eq 0 ]; then
+    echo "Nginx configuration successful"
+else
+    echo "Nginx configuration failed. Exiting."
+    exit 1
+fi
+
+echo "Script execution complete."
+
